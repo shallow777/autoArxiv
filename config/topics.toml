@@ -1,0 +1,41 @@
+[digest]
+project_name = "Auto arXiv Digest - NLP Agent Memory"
+lookback_days = 2
+max_papers_per_run = 5
+max_candidates = 60
+language = "zh-CN"
+
+[[topics]]
+name = "NLP"
+categories = ["cs.CL", "cs.AI", "cs.LG"]
+include_keywords = [
+  "natural language processing",
+  "nlp",
+  "language model",
+  "large language model",
+  "llm",
+  "reasoning",
+  "instruction tuning",
+  "retrieval-augmented generation",
+  "rag",
+]
+exclude_keywords = ["survey request for papers"]
+
+[[topics]]
+name = "Agent Skill Memory"
+categories = ["cs.AI", "cs.CL", "cs.LG", "cs.MA"]
+include_keywords = [
+  "agent",
+  "ai agent",
+  "tool use",
+  "function calling",
+  "skill",
+  "skills",
+  "memory",
+  "long-term memory",
+  "episodic memory",
+  "agentic",
+  "planning",
+  "multi-agent",
+]
+exclude_keywords = []

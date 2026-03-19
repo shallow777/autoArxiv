@@ -1,0 +1,23 @@
+[project]
+name = "auto-arxiv"
+version = "0.1.0"
+description = "Daily arXiv digest with GitHub Actions, OpenAI summarization, and email delivery."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "pypdf>=5.4.0",
+  "requests>=2.32.0",
+]
+
+[project.scripts]
+auto-arxiv = "auto_arxiv.main:main"
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
