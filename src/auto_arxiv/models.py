@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from typing import Any
 from dataclasses import dataclass, field
 from datetime import datetime
 
@@ -10,6 +11,7 @@ class TopicRule:
     categories: list[str]
     include_keywords: list[str]
     exclude_keywords: list[str]
+    required_keyword_groups: list[list[str]]
 
 
 @dataclass(slots=True)
@@ -43,3 +45,4 @@ class Paper:
     relevance_score: int = 0
     summary: str = ""
     recommendation_reason: str = ""
+    digest: dict[str, Any] = field(default_factory=dict)

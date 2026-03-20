@@ -29,6 +29,10 @@ def load_config(config_path: str | Path) -> AppConfig:
             categories=list(topic.get("categories", [])),
             include_keywords=[item.lower() for item in topic.get("include_keywords", [])],
             exclude_keywords=[item.lower() for item in topic.get("exclude_keywords", [])],
+            required_keyword_groups=[
+                [item.lower() for item in group]
+                for group in topic.get("required_keyword_groups", [])
+            ],
         )
         for topic in topics
     ]

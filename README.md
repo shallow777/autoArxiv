@@ -29,6 +29,7 @@ python -m auto_arxiv.main
 - `categories`: arXiv 分类
 - `include_keywords`: 必须命中的关键词
 - `exclude_keywords`: 排除词
+- `required_keyword_groups`: 每一组都至少命中一个关键词，适合收紧主题
 - `max_papers_per_run`: 每次最多发几篇
 
 当前默认主题已经调整为你关心的方向：

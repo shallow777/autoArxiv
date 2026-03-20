@@ -20,6 +20,9 @@ include_keywords = [
   "rag",
 ]
 exclude_keywords = ["survey request for papers"]
+required_keyword_groups = [
+  ["language model", "large language model", "llm", "natural language processing", "nlp"],
+]
 
 [[topics]]
 name = "Agent Skill Memory"
@@ -39,3 +42,7 @@ include_keywords = [
   "multi-agent",
 ]
 exclude_keywords = []
+required_keyword_groups = [
+  ["agent", "ai agent", "agentic", "multi-agent"],
+  ["skill", "skills", "memory", "long-term memory", "episodic memory", "tool use", "function calling", "planning"],
+]

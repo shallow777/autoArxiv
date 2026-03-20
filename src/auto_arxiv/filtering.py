@@ -29,7 +29,9 @@ def select_papers(config: AppConfig, papers: list[Paper], seen_ids: set[str]) ->
 
 
 def _score_topic_match(paper: Paper, topic: TopicRule) -> int:
-    text = f"{paper.title}\n{paper.abstract}".lower()
+    title = paper.title.lower()
+    abstract = paper.abstract.lower()
+    text = f"{title}\n{abstract}"
     categories = set(paper.categories)
 
     if topic.categories and not categories.intersection(topic.categories):
@@ -38,9 +40,15 @@ def _score_topic_match(paper: Paper, topic: TopicRule) -> int:
     if any(keyword in text for keyword in topic.exclude_keywords):
         return 0
 
+    for group in topic.required_keyword_groups:
+        if not any(keyword in text for keyword in group):
+            return 0
+
     score = 0
     for keyword in topic.include_keywords:
-        if keyword in text:
+        if keyword in title:
+            score += 4
+        elif keyword in abstract:
             score += 2
 
     if categories.intersection(topic.categories):
