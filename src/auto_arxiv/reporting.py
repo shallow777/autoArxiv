@@ -21,6 +21,7 @@ def render_email_html(config: AppConfig, papers: list[Paper]) -> str:
     for index, paper in enumerate(papers, start=1):
         digest = paper.digest
         code_link = str(digest.get("code_link", "")).strip()
+        code_link_html = f' | <a href="{escape(code_link)}">Code</a>' if code_link else ""
         method = digest.get("method_overview", {})
         implications = digest.get("implications", {})
         figure = digest.get("most_important_figure", {})
@@ -47,7 +48,7 @@ def render_email_html(config: AppConfig, papers: list[Paper]) -> str:
                 <strong>Links:</strong>
                 <a href="{escape(paper.abs_url)}">Abstract</a> |
                 <a href="{escape(paper.pdf_url)}">PDF</a>
-                {" | <a href=\"" + escape(code_link) + "\">Code</a>" if code_link else ""}
+                {code_link_html}
               </p>
               <h4 style="margin:12px 0 6px 0;">1. One-line takeaway</h4>
               <p style="margin:0 0 8px 0;">{escape(str(digest.get('one_line_takeaway', '')))}</p>
