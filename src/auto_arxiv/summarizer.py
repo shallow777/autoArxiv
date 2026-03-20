@@ -75,6 +75,7 @@ def _build_prompt(config: AppConfig, paper: Paper) -> str:
     return (
         f"You are preparing a daily arXiv digest in {config.digest.language}.\n"
         "Return strict JSON only.\n"
+        "All prose fields must be written in Simplified Chinese.\n"
         "Use this exact schema:\n"
         "{\n"
         '  "topics": ["..."],\n'
@@ -110,6 +111,7 @@ def _build_prompt(config: AppConfig, paper: Paper) -> str:
         '  "final_summary": "..."\n'
         "}\n"
         "Keep it concise but information-dense. If venue or code is unknown, use an empty string.\n"
+        "Do not answer in English unless a paper title, metric name, or method name must remain in English.\n"
         "Base your answer on the paper content excerpt below, not on webpage structure or HTML.\n\n"
         f"Title: {paper.title}\n"
         f"Authors: {', '.join(paper.authors)}\n"

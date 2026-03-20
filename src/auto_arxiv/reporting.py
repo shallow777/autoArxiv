@@ -22,6 +22,13 @@ def render_email_html(config: AppConfig, papers: list[Paper]) -> str:
         digest = paper.digest
         code_link = str(digest.get("code_link", "")).strip()
         code_link_html = f' | <a href="{escape(code_link)}">Code</a>' if code_link else ""
+        figure_html = (
+            f'<p style="margin:8px 0;"><img src="cid:{escape(paper.figure_content_id)}" '
+            'style="max-width:100%;border:1px solid #d0d7de;border-radius:8px;" '
+            'alt="Most important figure"></p>'
+            if paper.figure_content_id
+            else "<p style=\"margin:8px 0;\">当前未自动提取到可嵌入的论文图片。</p>"
+        )
         method = digest.get("method_overview", {})
         implications = digest.get("implications", {})
         figure = digest.get("most_important_figure", {})
@@ -50,36 +57,37 @@ def render_email_html(config: AppConfig, papers: list[Paper]) -> str:
                 <a href="{escape(paper.pdf_url)}">PDF</a>
                 {code_link_html}
               </p>
-              <h4 style="margin:12px 0 6px 0;">1. One-line takeaway</h4>
+              <h4 style="margin:12px 0 6px 0;">1. 一句话结论</h4>
               <p style="margin:0 0 8px 0;">{escape(str(digest.get('one_line_takeaway', '')))}</p>
-              <h4 style="margin:12px 0 6px 0;">2. Why it matters</h4>
+              <h4 style="margin:12px 0 6px 0;">2. 为什么重要</h4>
               <p style="margin:0 0 8px 0;">{escape(str(digest.get('why_it_matters', '')))}</p>
-              <h4 style="margin:12px 0 6px 0;">3. Research questions</h4>
+              <h4 style="margin:12px 0 6px 0;">3. 研究问题</h4>
               <ol style="margin:0 0 8px 18px;padding:0;">{research_questions_html}</ol>
-              <h4 style="margin:12px 0 6px 0;">4. Background and problem setting</h4>
+              <h4 style="margin:12px 0 6px 0;">4. 背景与问题设定</h4>
               <p style="margin:0 0 8px 0;">{escape(str(digest.get('background_and_problem_setting', '')))}</p>
-              <h4 style="margin:12px 0 6px 0;">5. Method overview</h4>
-              <p style="margin:0 0 8px 0;"><strong>Task / environment:</strong> {escape(str(method.get('task_environment', '')))}</p>
-              <p style="margin:0 0 8px 0;"><strong>Condition / intervention design:</strong> {escape(str(method.get('condition_intervention_design', '')))}</p>
-              <p style="margin:0 0 8px 0;"><strong>Evaluation metrics:</strong> {escape(str(method.get('evaluation_metrics', '')))}</p>
-              <p style="margin:0 0 8px 0;"><strong>Model comparison:</strong> {escape(str(method.get('model_comparison', '')))}</p>
-              <p style="margin:0 0 8px 0;"><strong>My understanding:</strong> {escape(str(method.get('my_understanding', '')))}</p>
-              <h4 style="margin:12px 0 6px 0;">6. Key findings</h4>
+              <h4 style="margin:12px 0 6px 0;">5. 方法概览</h4>
+              <p style="margin:0 0 8px 0;"><strong>任务 / 环境:</strong> {escape(str(method.get('task_environment', '')))}</p>
+              <p style="margin:0 0 8px 0;"><strong>变量 / 干预设计:</strong> {escape(str(method.get('condition_intervention_design', '')))}</p>
+              <p style="margin:0 0 8px 0;"><strong>评价指标:</strong> {escape(str(method.get('evaluation_metrics', '')))}</p>
+              <p style="margin:0 0 8px 0;"><strong>模型比较:</strong> {escape(str(method.get('model_comparison', '')))}</p>
+              <p style="margin:0 0 8px 0;"><strong>我的理解:</strong> {escape(str(method.get('my_understanding', '')))}</p>
+              <h4 style="margin:12px 0 6px 0;">6. 关键发现</h4>
               <ul style="margin:0 0 8px 18px;padding:0;">{findings_html}</ul>
-              <h4 style="margin:12px 0 6px 0;">7. Most important figure</h4>
-              <p style="margin:0 0 8px 0;"><strong>Figure source:</strong> {escape(str(figure.get('figure_source', '')))}</p>
-              <p style="margin:0 0 8px 0;"><strong>Why this figure matters:</strong> {escape(str(figure.get('why_it_matters', '')))}</p>
-              <p style="margin:0 0 8px 0;"><strong>How to read this figure:</strong> {escape(str(figure.get('how_to_read', '')))}</p>
-              <h4 style="margin:12px 0 6px 0;">10. Implications for Agent / Skill / Memory</h4>
-              <p style="margin:0 0 8px 0;"><strong>For Agent systems:</strong> {escape(str(implications.get('for_agent_systems', '')))}</p>
-              <p style="margin:0 0 8px 0;"><strong>For Skill:</strong> {escape(str(implications.get('for_skill', '')))}</p>
-              <p style="margin:0 0 8px 0;"><strong>For Memory:</strong> {escape(str(implications.get('for_memory', '')))}</p>
-              <p style="margin:0 0 8px 0;"><strong>For evaluation:</strong> {escape(str(implications.get('for_evaluation', '')))}</p>
-              <h4 style="margin:12px 0 6px 0;">11. Limitations</h4>
+              <h4 style="margin:12px 0 6px 0;">7. 最重要的图</h4>
+              {figure_html}
+              <p style="margin:0 0 8px 0;"><strong>图来源:</strong> {escape(str(figure.get('figure_source', '')))}</p>
+              <p style="margin:0 0 8px 0;"><strong>为什么重要:</strong> {escape(str(figure.get('why_it_matters', '')))}</p>
+              <p style="margin:0 0 8px 0;"><strong>如何读这张图:</strong> {escape(str(figure.get('how_to_read', '')))}</p>
+              <h4 style="margin:12px 0 6px 0;">10. 对 Agent / Skill / Memory 的启发</h4>
+              <p style="margin:0 0 8px 0;"><strong>对 Agent 系统:</strong> {escape(str(implications.get('for_agent_systems', '')))}</p>
+              <p style="margin:0 0 8px 0;"><strong>对 Skill:</strong> {escape(str(implications.get('for_skill', '')))}</p>
+              <p style="margin:0 0 8px 0;"><strong>对 Memory:</strong> {escape(str(implications.get('for_memory', '')))}</p>
+              <p style="margin:0 0 8px 0;"><strong>对评测:</strong> {escape(str(implications.get('for_evaluation', '')))}</p>
+              <h4 style="margin:12px 0 6px 0;">11. 局限性</h4>
               <ul style="margin:0 0 8px 18px;padding:0;">{limitations_html}</ul>
-              <h4 style="margin:12px 0 6px 0;">12. My take / Personal notes</h4>
+              <h4 style="margin:12px 0 6px 0;">12. 我的看法 / 个人笔记</h4>
               <p style="margin:0 0 8px 0;">{escape(str(digest.get('my_take', '')))}</p>
-              <h4 style="margin:12px 0 6px 0;">13. Final summary</h4>
+              <h4 style="margin:12px 0 6px 0;">13. 总结</h4>
               <p style="margin:0 0 8px 0;">{escape(str(digest.get('final_summary', '')))}</p>
               <p style="margin:0;">
                 <a href="{escape(paper.abs_url)}">Abstract</a>
@@ -131,59 +139,59 @@ def _render_markdown(config: AppConfig, papers: list[Paper]) -> str:
                 f"**Links:** [Abstract]({paper.abs_url}) | [PDF]({paper.pdf_url})"
                 + (f" | [Code]({code_link})" if code_link else ""),
                 "",
-                "### 1. One-line takeaway",
+                "### 1. 一句话结论",
                 "",
                 str(digest.get("one_line_takeaway", "")),
                 "",
-                "### 2. Why it matters",
+                "### 2. 为什么重要",
                 "",
                 str(digest.get("why_it_matters", "")),
                 "",
-                "### 3. Research questions",
+                "### 3. 研究问题",
                 "",
                 *[f"{idx}. {item}" for idx, item in enumerate(digest.get("research_questions", []), start=1)],
                 "",
-                "### 4. Background and problem setting",
+                "### 4. 背景与问题设定",
                 "",
                 str(digest.get("background_and_problem_setting", "")),
                 "",
-                "### 5. Method overview",
+                "### 5. 方法概览",
                 "",
-                f"- Task / environment: {method.get('task_environment', '')}",
-                f"- Condition / intervention design: {method.get('condition_intervention_design', '')}",
-                f"- Evaluation metrics: {method.get('evaluation_metrics', '')}",
-                f"- Model comparison: {method.get('model_comparison', '')}",
-                f"- My understanding: {method.get('my_understanding', '')}",
+                f"- 任务 / 环境: {method.get('task_environment', '')}",
+                f"- 变量 / 干预设计: {method.get('condition_intervention_design', '')}",
+                f"- 评价指标: {method.get('evaluation_metrics', '')}",
+                f"- 模型比较: {method.get('model_comparison', '')}",
+                f"- 我的理解: {method.get('my_understanding', '')}",
                 "",
-                "### 6. Key findings",
+                "### 6. 关键发现",
                 "",
                 *[
                     f"- {item.get('title', 'Finding')}: {item.get('detail', '')}"
                     for item in digest.get("key_findings", [])
                 ],
                 "",
-                "### 7. Most important figure",
+                "### 7. 最重要的图",
                 "",
-                f"- Figure source: {figure.get('figure_source', '')}",
-                f"- Why this figure matters: {figure.get('why_it_matters', '')}",
-                f"- How to read this figure: {figure.get('how_to_read', '')}",
+                f"- 图来源: {figure.get('figure_source', '')}",
+                f"- 为什么重要: {figure.get('why_it_matters', '')}",
+                f"- 如何读这张图: {figure.get('how_to_read', '')}",
                 "",
-                "### 10. Implications for Agent / Skill / Memory",
+                "### 10. 对 Agent / Skill / Memory 的启发",
                 "",
-                f"- For Agent systems: {implications.get('for_agent_systems', '')}",
-                f"- For Skill: {implications.get('for_skill', '')}",
-                f"- For Memory: {implications.get('for_memory', '')}",
-                f"- For evaluation: {implications.get('for_evaluation', '')}",
+                f"- 对 Agent 系统: {implications.get('for_agent_systems', '')}",
+                f"- 对 Skill: {implications.get('for_skill', '')}",
+                f"- 对 Memory: {implications.get('for_memory', '')}",
+                f"- 对评测: {implications.get('for_evaluation', '')}",
                 "",
-                "### 11. Limitations",
+                "### 11. 局限性",
                 "",
                 *[f"- {item}" for item in digest.get("limitations", [])],
                 "",
-                "### 12. My take / Personal notes",
+                "### 12. 我的看法 / 个人笔记",
                 "",
                 str(digest.get("my_take", "")),
                 "",
-                "### 13. Final summary",
+                "### 13. 总结",
                 "",
                 str(digest.get("final_summary", "")),
                 "",

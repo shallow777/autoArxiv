@@ -7,6 +7,7 @@ from typing import Iterable
 from urllib.parse import quote_plus
 from xml.etree import ElementTree
 
+import fitz
 from pypdf import PdfReader
 import requests
 
@@ -46,6 +47,7 @@ def populate_article_texts(papers: list[Paper], max_pages: int = 15, max_chars: 
         try:
             response = _request_with_retries(paper.pdf_url, timeout=90)
             response.raise_for_status()
+            paper.figure_bytes, paper.figure_subtype = _extract_candidate_figure(response.content, max_pages=max_pages)
             reader = PdfReader(BytesIO(response.content))
 
             chunks: list[str] = []
@@ -76,6 +78,38 @@ def _request_with_retries(url: str, timeout: int, max_attempts: int = 3) -> requ
     if last_error is not None:
         raise last_error
     raise RuntimeError(f"request failed without an exception: {url}")
+
+
+def _extract_candidate_figure(pdf_bytes: bytes, max_pages: int) -> tuple[bytes | None, str]:
+    try:
+        document = fitz.open(stream=pdf_bytes, filetype="pdf")
+    except Exception:
+        return None, ""
+
+    best_image: tuple[int, bytes, str] | None = None
+    try:
+        for page_index in range(min(max_pages, document.page_count)):
+            page = document.load_page(page_index)
+            for image_info in page.get_images(full=True):
+                xref = image_info[0]
+                image = document.extract_image(xref)
+                image_bytes = image.get("image")
+                image_ext = image.get("ext", "")
+                width = int(image.get("width", 0))
+                height = int(image.get("height", 0))
+                area = width * height
+                if not image_bytes or area < 120000:
+                    continue
+                if best_image is None or area > best_image[0]:
+                    best_image = (area, image_bytes, image_ext)
+    finally:
+        document.close()
+
+    if best_image is None:
+        return None, ""
+    _, image_bytes, image_ext = best_image
+    subtype = "jpeg" if image_ext in {"jpg", "jpeg"} else image_ext
+    return image_bytes, subtype
 
 
 def _parse_entry(entry: ElementTree.Element) -> Paper:

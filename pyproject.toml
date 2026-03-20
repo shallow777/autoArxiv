@@ -5,6 +5,7 @@ description = "Daily arXiv digest with GitHub Actions, OpenAI summarization, and
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+  "PyMuPDF>=1.26.0",
   "pypdf>=5.4.0",
   "requests>=2.32.0",
 ]

@@ -31,11 +31,15 @@ def main() -> None:
     selected = select_papers(config, papers, seen_ids)
     populate_article_texts(selected)
     enrich_papers(config, selected)
+    for index, paper in enumerate(selected, start=1):
+        if paper.figure_bytes and paper.figure_subtype:
+            safe_arxiv_id = paper.arxiv_id.replace(".", "-")
+            paper.figure_content_id = f"paper-{index}-{safe_arxiv_id}@auto-arxiv.local"
 
-    report_path = write_report(args.reports_dir, config, selected)
     subject = f"{config.digest.project_name} | {datetime.utcnow().strftime('%Y-%m-%d')}"
     email_html = render_email_html(config, selected)
-    email_sent = send_digest_email(subject, email_html)
+    report_path = write_report(args.reports_dir, config, selected)
+    email_sent = send_digest_email(subject, email_html, selected)
 
     seen_ids.update(paper.arxiv_id for paper in selected)
     save_seen_ids(args.seen_store, seen_ids)
