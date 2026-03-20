@@ -1,5 +1,5 @@
 [digest]
-project_name = "Auto arXiv Digest - NLP Agent Skill Memory Evolve"
+project_name = "Auto arXiv Digest - Agent First, NLP Fallback"
 target_day_offset = 1
 max_papers_per_run = 5
 max_candidates = 120
@@ -7,11 +7,9 @@ language = "zh-CN"
 timezone = "Asia/Shanghai"
 
 [[topics]]
-name = "NLP Agent Skill Memory Evolve"
+name = "Agent Skill Memory Evolve"
 categories = ["cs.CL", "cs.AI", "cs.LG"]
 include_keywords = [
-  "large language model",
-  "llm",
   "agent",
   "ai agent",
   "autonomous agent",
@@ -46,4 +44,32 @@ exclude_keywords = [
 required_keyword_groups = [
   ["agent", "ai agent", "autonomous agent", "agentic", "multi-agent"],
   ["skill", "skills", "memory", "long-term memory", "episodic memory", "retrieval memory", "tool use", "function calling", "planning", "evolve", "evolution", "self-evolving", "self-improving", "adaptive agent"],
+]
+
+[[topics]]
+name = "LLM NLP Fallback"
+categories = ["cs.CL", "cs.AI", "cs.LG"]
+include_keywords = [
+  "large language model",
+  "llm",
+  "language model",
+  "natural language processing",
+  "nlp",
+  "instruction tuning",
+  "reasoning",
+  "retrieval-augmented generation",
+  "rag",
+  "alignment",
+  "text generation",
+]
+exclude_keywords = [
+  "survey request for papers",
+  "vision-language",
+  "video-language",
+  "image generation",
+  "speech recognition",
+  "text-to-image",
+]
+required_keyword_groups = [
+  ["large language model", "llm", "language model", "natural language processing", "nlp"],
 ]

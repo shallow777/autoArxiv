@@ -36,6 +36,11 @@ python -m auto_arxiv.main
 
 - NLP + Agent + Skill / Memory / Evolve 强相关
 
+筛选顺序目前是：
+
+1. 先找 `Agent / Agent Skill / Agent Memory / Agent Evolve` 强相关论文
+2. 如果当天没有命中，再回退到 `LLM / NLP` 相关论文
+
 ## GitHub Secrets
 
 在仓库的 `Settings -> Secrets and variables -> Actions` 中配置：
