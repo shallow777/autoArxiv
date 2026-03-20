@@ -2,7 +2,7 @@
 project_name = "Auto arXiv Digest - NLP Agent Skill Memory Evolve"
 lookback_days = 2
 max_papers_per_run = 5
-max_candidates = 60
+max_candidates = 120
 language = "zh-CN"
 
 [[topics]]
@@ -43,7 +43,6 @@ exclude_keywords = [
   "text-to-image",
 ]
 required_keyword_groups = [
-  ["language model", "large language model", "llm", "natural language processing", "nlp", "language agent", "text-based agent"],
   ["agent", "ai agent", "autonomous agent", "agentic", "multi-agent"],
   ["skill", "skills", "memory", "long-term memory", "episodic memory", "retrieval memory", "tool use", "function calling", "planning", "evolve", "evolution", "self-evolving", "self-improving", "adaptive agent"],
 ]
