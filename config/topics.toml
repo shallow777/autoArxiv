@@ -55,7 +55,6 @@ exclude_keywords = [
 ]
 required_keyword_groups = [
   ["agent", "ai agent", "autonomous agent", "agentic", "multi-agent"],
-  ["skill", "skills", "memory", "long-term memory", "episodic memory", "retrieval memory", "tool use", "function calling", "planning", "reinforcement learning", "rl", "policy optimization", "policy gradient", "actor-critic", "q-learning", "offline rl", "reward model", "reward shaping", "decision making", "exploration", "credit assignment", "evolve", "evolution", "self-evolving", "self-improving", "adaptive agent"],
 ]
 
 [[topics]]
